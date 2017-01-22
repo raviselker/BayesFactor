@@ -34,6 +34,8 @@ enumerateGeneralModels = function(fmla, whichModels, neverExclude=NULL, includeB
 
   ntrms <- length(trms)
   dv = stringFromFormula(fmla[[2]])
+  dv = composeTerm(dv)
+
   if(ntrms == 0 )  return(list(fmla))
   if(ntrms == 1 ) whichModels = "all"
 
@@ -66,6 +68,7 @@ enumerateGeneralModels = function(fmla, whichModels, neverExclude=NULL, includeB
       strng <- c(strng,alwaysIncludedString)
   }
   strng <- unique(strng)
+
   fmlaOut <- lapply(strng, function(el){
     formula(paste(dv,"~", el))
   })
@@ -99,8 +102,10 @@ possibleRestrictionsWithMainGeneralFallback <- function(trms, alwaysKept){
 }
 
 possibleRestrictionsWithMainGeneral <- function(trms, alwaysKept=NULL){
+
   if(length(trms)==1) return(list(trms))
-  myFactors = unique(unlist(strsplit(trms,":",fixed=TRUE)))  
+  myFactors = unique(unlist(decomposeTerms(trms)))
+
   nFactors = length(myFactors)
 
   # If there are more than 5 factors involved then the total number of models is
