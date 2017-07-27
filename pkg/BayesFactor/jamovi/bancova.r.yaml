@@ -1,0 +1,85 @@
+---
+name:  bancova
+title: Bayesian ANCOVA
+jrs: '1.0'
+
+items:
+    - name: main
+      title: ANCOVA
+      type: Table
+      description: a table of ANCOVA results
+      rowSelect: (nullRow)
+      sortSelect: (sort)
+      clearWith:
+        - dep
+        - fixed
+        - random
+        - covs
+        - modelTerms
+
+      columns:
+        - name: name
+          title: Model
+          type: text
+          sortable: true
+
+        - name: bf
+          title: BF₁₀
+          sortable: true
+
+        - name: err
+          title: 'error %'
+
+    - name: descPlot
+      title: Descriptive Plot
+      visible: (plotHAxis)
+      type: Image
+      description: a descriptives plot
+      width: 500
+      height: 300
+      renderFun: .descPlot
+      clearWith:
+        - dep
+        - plotHAxis
+        - plotSepLines
+        - plotSepPlots
+        - plotError
+        - ciWidth
+
+    - name: descPlots
+      title: Descriptive Plots
+      type: Array
+      description: an array of descriptives plots
+      visible: (plotSepPlots)
+      template:
+          title: $key
+          type: Image
+          renderFun: .descPlot
+          clearWith:
+              - dep
+              - plotHAxis
+              - plotSepLines
+              - plotSepPlots
+              - plotError
+              - ciWidth
+
+    - name: state
+      type: State
+      clearWith:
+        - dep
+        - fixed
+        - random
+        - covs
+        - modelTerms
+
+    - name:  param
+      title: Parameter estimates
+      type:  Table
+      rowSelect: (paramRow)
+      columns:
+        - name: param
+          title: Parameter
+          type: text
+        - name: mean
+          title: 'Mean'
+          type: number

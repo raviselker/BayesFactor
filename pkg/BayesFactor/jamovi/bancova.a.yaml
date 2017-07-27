@@ -1,0 +1,184 @@
+---
+name: bancova
+title: Bayesian ANCOVA
+menuGroup: BayesFactor
+menuSubgroup: ANOVA
+version: '1.0.0'
+jas: '1.1'
+
+description:
+    main: Analysis of Covariance
+    R:
+        dontrun: false
+        usage: |
+            data('ToothGrowth')
+
+            bancova(ToothGrowth, dep = 'len', factors = 'supp', covs = 'dose')
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: the data as a data frame
+
+    - name: dep
+      title: Dependent Variable
+      type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - continuous
+        - nominal
+        - ordinal
+      description:
+          R: >
+            a string naming the dependent variable from `data`, variable
+            must be numeric
+
+    - name: fixed
+      title: Fixed Factors
+      type: Variables
+      suggested:
+        - nominal
+        - ordinal
+      default:
+      description:
+          R: a vector of strings naming the fixed factors from `data`
+
+    - name: random
+      title: Random Factors
+      type: Variables
+      suggested:
+        - nominal
+        - ordinal
+      default:
+      description:
+          R: a vector of strings naming the random factors from `data`
+
+    - name: covs
+      title: Covariates
+      type: Variables
+      suggested:
+        - continuous
+      permitted:
+        - continuous
+        - nominal
+        - ordinal
+      default:
+      description:
+          R: a vector of strings naming the covariates from `data`
+
+    - name: fixedPrior
+      title: Fixed effects prior width
+      type: Number
+      min: 0.1
+      max: 2
+      default: 0.5
+
+    - name: randomPrior
+      title: Random effects prior width
+      type: Number
+      min: 0.1
+      max: 2
+      default: 1
+
+    - name: covPrior
+      title: Covariates prior width
+      type: Number
+      min: 0.1
+      max: 2
+      default: .354
+
+    - name: modelTerms
+      title: Model Terms
+      type: Array
+      template:
+          type: Group
+          elements:
+            - name: term
+              type: Array
+              template:
+                   type: String
+            - name: assumed
+              type: Bool
+      default:
+
+    - name: plotHAxis
+      title: Horizontal axis
+      type: Variable
+      default:
+      description:
+          R: >
+            a string naming the variable placed on the horizontal axis of the
+            plot
+
+    - name: plotSepLines
+      title: Separate lines
+      type: Variable
+      default:
+      description:
+          R: >
+            a string naming the variable represented as separate lines on the
+            plot
+
+    - name: plotSepPlots
+      title: Separate plots
+      type: Variable
+      default:
+      description:
+          R: >
+            a string naming the variable to separate over to form multiple plots
+
+    - name: plotError
+      title: Error Bar Definition
+      type: List
+      options:
+        - name: none
+          title: None
+        - name: ci
+          title: Credible interval
+        - name: se
+          title: Standard Error
+      default: ci
+      description:
+          R: >
+            `'none'`, `'ci'` (default), or `'se'`. Use no error
+            bars, use credible intervals, or use standard errors on the
+            plots, respectively
+
+    - name: ciWidth
+      title: Credible level
+      type: Number
+      min: 50
+      max: 99.9
+      default: 95
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95) specifying the credible
+            interval width
+
+    - name: nullRow
+      title: Null row number
+      type: Integer
+      default: -1
+      hidden: true
+
+    - name: paramRow
+      title: Parameter row number
+      type: Integer
+      default: -1
+      hidden: true
+
+    - name: sort
+      title: Row sort
+      type: Sort
+      default:
+      hidden: true
+      passive: true
+
+    - name: nParamIters
+      title: MCMC Iterations
+      type: Integer
+      min: 1
+      default: 10000
+...

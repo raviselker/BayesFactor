@@ -33,5 +33,12 @@ analyses:
     menuGroup: BayesFactor
     menuTitle: Bayesian One Sample T-Test
     menuSubgroup: T-Tests
+  - title: Bayesian ANCOVA
+    name: bancova
+    ns: BayesFactor
+    menuGroup: BayesFactor
+    menuSubgroup: ANOVA
+    menuTitle: Bayesian ANCOVA
+    description: Analysis of Covariance
 
 ...
