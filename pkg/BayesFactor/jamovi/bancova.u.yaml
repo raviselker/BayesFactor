@@ -57,12 +57,16 @@ children:
         format: term
         children:
           - type: TargetLayoutBox
+            transferAction: interactions
             children:
               - type: ListBox
                 name: modelTerms
                 showColumnHeaders: true
                 isTarget: true
                 fullRowSelect: true
+                valueFilter: unique
+                events:
+                    change: './ancova.events::onChange_modelTerms'
                 columns:
                   - name: term
                     label: Term

@@ -9,10 +9,6 @@ const events = {
         calcModelTerms(ui, this);
     },
 
-    onChange_covariates: function(ui) {
-        calcModelTerms(ui, this);
-    },
-
     onChange_modelTerms: function(ui) {
         filterModelTerms(ui, this);
     },
@@ -36,7 +32,7 @@ var calcModelTerms = function(ui, context) {
     ui.plotsSupplier.setValue(context.valuesToItems(variableList, FormatDef.variable));
 
     var diff = context.findChanges("variableList", variableList, true, FormatDef.variable);
-    var diff2 = context.findChanges("covariatesList", covariatesList, true, FormatDef.variable);
+    var diff2 = context.findChanges("covariatesList", covariatesList.concat(randomList), true, FormatDef.variable);
     var combinedDiff = context.findChanges("combinedList", combinedList, true, FormatDef.variable);
 
 
@@ -45,7 +41,7 @@ var calcModelTerms = function(ui, context) {
 
     for (var i = 0; i < combinedDiff.removed.length; i++) {
         for (var j = 0; j < termsList.length; j++) {
-            if (FormatDef.term.contains(termsList[j], combinedDiff.removed[i])) {
+            if (FormatDef.term.contains(termsList[j].term, combinedDiff.removed[i])) {
                 termsList.splice(j, 1);
                 termsChanged = true;
                 j -= 1;
@@ -54,7 +50,7 @@ var calcModelTerms = function(ui, context) {
     }
 
     for (let i = 0; i < termsList.length; i++) {
-        if (termsList[i].length > 1 && containsCovariate(termsList[i], covariatesList)) {
+        if (termsList[i].term.length > 1 && containsCovariate(termsList[i].term, covariatesList)) {
             termsList.splice(i, 1);
             i -= 1;
             termsChanged = true;
@@ -65,27 +61,27 @@ var calcModelTerms = function(ui, context) {
         let item = diff.added[a];
         var listLength = termsList.length;
         for (var j = 0; j < listLength; j++) {
-            var newTerm = context.clone(termsList[j]);
+            var newTerm = context.clone(termsList[j].term);
             if (containsCovariate(newTerm, covariatesList) === false) {
-                if (context.listContains(newTerm, item, FormatDef.variable) === false) {
-                    newTerm.push(item)
-                    if (context.listContains(termsList, newTerm , FormatDef.term) === false) {
-                        termsList.push(newTerm);
+                if (context.listContains(newTerm, item, FormatDef.variable, 'term') === false) {
+                    newTerm.push(item);
+                    if (context.listContains(termsList, newTerm , FormatDef.term, 'term') === false) {
+                        termsList.push({ term: newTerm, assumed: false });
                         termsChanged = true;
                     }
                 }
             }
         }
-        if (context.listContains(termsList, [item] , FormatDef.term) === false) {
-            termsList.push([item]);
+        if (context.listContains(termsList, [item] , FormatDef.term, 'term') === false) {
+            termsList.push({ term: [item], assumed: false });
             termsChanged = true;
         }
     }
 
     for (var a = 0; a < diff2.added.length; a++) {
         let item = diff2.added[a];
-        if (context.listContains(termsList, [item] , FormatDef.term) === false) {
-            termsList.push([item]);
+        if (context.listContains(termsList, [item] , FormatDef.term, 'term') === false) {
+            termsList.push({ term: [item], assumed: false });
             termsChanged = true;
         }
     }
@@ -96,7 +92,7 @@ var calcModelTerms = function(ui, context) {
 
 var filterModelTerms = function(ui, context) {
     var termsList = context.cloneArray(ui.modelTerms.value(), []);
-    var diff = context.findChanges("termsList", termsList, true, FormatDef.term);
+    var diff = context.findChanges("termsList", termsList, true, FormatDef.term, 'term');
 
     var changed = false;
     if (diff.removed.length > 0) {
@@ -104,7 +100,7 @@ var filterModelTerms = function(ui, context) {
         for (var i = 0; i < diff.removed.length; i++) {
             var item = diff.removed[i];
             for (var j = 0; j < termsList.length; j++) {
-                if (FormatDef.term.contains(termsList[j], item)) {
+                if (FormatDef.term.contains(termsList[j].term, item)) {
                     termsList.splice(j, 1);
                     j -= 1;
                     itemsRemoved = true;
@@ -116,7 +112,7 @@ var filterModelTerms = function(ui, context) {
             changed = true;
     }
 
-    if (context.sortArraysByLength(termsList))
+    if (context.sortArraysByLength(termsList, 'term'))
         changed = true;
 
     if (changed)
