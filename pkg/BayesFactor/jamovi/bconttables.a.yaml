@@ -1,0 +1,176 @@
+---
+name: bcontTables
+title: Bayesian Contingency Tables
+
+menuGroup: BayesFactor
+menuSubgroup: Frequencies
+menuTitle: Contingency Tables
+
+version: '1.0.0'
+jas: '1.2'
+
+description:
+    R:
+        dontrun: false
+        usage: |
+            data('HairEyeColor')
+            dat <- as.data.frame(HairEyeColor)
+
+            bcontTables(dat, rows = 'Hair', cols = 'Eye', counts = 'Freq')
+
+
+completeWhenFilled: true
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: the data as a data frame
+
+    - name: rows
+      title: Rows
+      type: Variable
+      suggested:
+        - nominal
+        - ordinal
+      description:
+          R: >
+              a string naming the variable to use as the rows in the
+              contingency table
+
+    - name: cols
+      title: Columns
+      type: Variable
+      suggested:
+        - nominal
+        - ordinal
+      description:
+          R: >
+            a string naming the variable to use as the columns in the
+            contingency table
+
+    - name: counts
+      title: Counts (optional)
+      type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+      default:
+      description:
+          R: >
+            a string naming the variable to use as counts, or NULL if each row
+            represents a single observation
+
+    - name: layers
+      title: Layers
+      type: Variables
+      default: NULL
+      description:
+          R: >
+            a character vector naming variables to split the contingency table
+            across
+
+    - name: sampling
+      title: Sampling
+      type: List
+      options:
+        - name: poisson
+          title: Poisson
+        - name: jointMulti
+          title: Joint multinomial
+        - name: indepMultiRowsFixed
+          title: Independent multinomial, rows fixed
+        - name: indepMultiColsFixed
+          title: Independent multinomial, columns fixed
+        - name: hypergeom
+          title: Hypergeometric (2x2 only)
+      default: indepMultiRowsFixed
+
+    - name: hypothesis
+      title: Alternative hypothesis
+      type: List
+      options:
+        - name: different
+          title: "Group 1 ≠ Group 2"
+        - name: oneGreater
+          title: "Group 1 > Group 2"
+        - name: twoGreater
+          title: "Group 1 < Group 2"
+      default: different
+      description:
+          R: >
+            `'different'` (default), `'oneGreater'` or
+            `'twoGreater'`, the alternative hypothesis; group 1 different
+            to group 2, group 1 greater than group 2, and group 2 greater than
+            group 1 respectively
+
+    - name: bfType
+      title: Bayes factor
+      type: List
+      options:
+        - name: BF10
+          title: BF₁₀
+        - name: BF01
+          title: BF₀₁
+      default: BF10
+      description:
+          R: >
+            `'BF10'` (default) or `'BF01'`
+
+    - name: logOdds
+      title: Log odds ratio
+      type: Bool
+      default: false
+      description:
+          R: >
+            `TRUE` or `FALSE` (default), provide the log odds ratio (only available
+            for 2x2 tables)
+
+    - name: pp
+      title: Prior and posterior
+      type: Bool
+      default: false
+
+    - name: priorWidth
+      title: Prior concentration
+      type: Number
+      default: 1
+      min: 0.5
+      max: 2.0
+
+    - name: ciWidth
+      title: Confidence level
+      type: Number
+      min: 50
+      max: 99.9
+      default: 95
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95), width of the confidence
+            intervals to provide
+
+    - name: pcRow
+      title: Row
+      type: Bool
+      default: false
+      description:
+          R: >
+            `TRUE` or `FALSE` (default), provide row percentages
+
+    - name: pcCol
+      title: Column
+      type: Bool
+      default: false
+      description:
+          R: >
+            `TRUE` or `FALSE` (default), provide column percentages
+
+    - name: pcTot
+      title: Total
+      type: Bool
+      default: false
+      description:
+          R: >
+            `TRUE` or `FALSE` (default), provide total percentages
+...

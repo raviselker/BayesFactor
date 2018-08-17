@@ -1,0 +1,102 @@
+---
+name:  bcontTables
+title: Bayesian Contingency Tables
+jrs: '1.0'
+
+items:
+    - name: freqs
+      title: Contingency Tables
+      type: Table
+      description: a table of proportions
+      columns: [ ]
+      clearWith:
+        - rows
+        - cols
+        - counts
+        - layers
+
+    - name: tests
+      title: Bayesian Tests
+      type: Table
+
+      clearWith:
+        - rows
+        - cols
+        - counts
+        - layers
+
+      columns:
+        - name: test[bf10]
+          title: ''
+          type: text
+          content: BF₁₀
+          visible: (bfType:BF10)
+
+        - name: value[bf10]
+          title: Value
+          visible: (bfType:BF10)
+
+        - name: test[bf01]
+          title: ''
+          type: text
+          content: BF₀₁
+          visible: (bfType:BF01)
+
+        - name: value[bf01]
+          title: Value
+          visible: (bfType:BF01)
+
+        - name: test[N]
+          title: ''
+          type: text
+          content: 'N'
+
+        - name: value[N]
+          title: Value
+          type: integer
+
+    - name: odds
+      title: Log Odds Ratio
+      type: Table
+      description: a table of odds ratio results
+      visible: (logOdds)
+
+      clearWith:
+        - rows
+        - cols
+        - counts
+        - layers
+        - ciWidth
+
+      columns:
+        - name: t[lo]
+          title: ''
+          type: text
+          content: Log odds ratio
+
+        - name: v[lo]
+          title: Value
+
+        - name: cil[lo]
+          title: Lower
+          superTitle: Confidence Intervals
+
+        - name: ciu[lo]
+          title: Upper
+          superTitle: Confidence Intervals
+
+        - name: t[f]
+          title: ''
+          type: text
+          content: Fisher's exact test
+
+        - name: v[f]
+          title: Value
+
+        - name: cil[f]
+          title: Lower
+          superTitle: Confidence Intervals
+
+        - name: ciu[f]
+          title: Upper
+          superTitle: Confidence Intervals

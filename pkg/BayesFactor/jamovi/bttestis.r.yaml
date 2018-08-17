@@ -49,7 +49,7 @@ items:
           visible: (meanDiff)
 
         - name: es
-          title: Cohen's d
+          title: Effect size
           type: number
           visible: (effectSize)
 
@@ -93,10 +93,6 @@ items:
           title: Mean
           type: number
 
-        - name: med[1]
-          title: Median
-          type: number
-
         - name: sd[1]
           title: SD
           type: number
@@ -115,10 +111,6 @@ items:
 
         - name: mean[2]
           title: Mean
-          type: number
-
-        - name: med[2]
-          title: Median
           type: number
 
         - name: sd[2]

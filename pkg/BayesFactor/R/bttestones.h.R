@@ -34,9 +34,7 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous",
-                    "nominal",
-                    "ordinal"),
+                    "numeric"),
                 rejectInf=FALSE)
             private$..bfType <- jmvcore::OptionList$new(
                 "bfType",
@@ -362,6 +360,11 @@ bttestOneS <- function(
 
     if ( ! requireNamespace('jmvcore'))
         stop('bttestOneS requires jmvcore to be installed (restart may be required)')
+
+    if (missing(data))
+        data <- jmvcore:::marshalData(
+            parent.frame(),
+            `if`( ! missing(vars), vars, NULL))
 
     options <- bttestOneSOptions$new(
         vars = vars,

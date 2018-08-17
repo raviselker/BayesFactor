@@ -4,7 +4,7 @@ title: Bayesian One Sample T-Test
 menuGroup: BayesFactor
 menuSubgroup: T-Tests
 version: '1.0.0'
-jas: '1.1'
+jas: '1.2'
 
 description:
     R:
@@ -28,9 +28,7 @@ options:
       suggested:
         - continuous
       permitted:
-        - continuous
-        - nominal
-        - ordinal
+        - numeric
       rejectInf: false
       description:
           R: a vector of strings naming the variables of interest in `data`

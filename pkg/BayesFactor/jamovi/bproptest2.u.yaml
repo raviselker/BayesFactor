@@ -1,0 +1,69 @@
+---
+name:  bpropTest2
+title: Bayesian Proportion Test (2 Outcomes)
+jus:   '2.0'
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    suggested:
+      - continuous
+      - nominal
+      - ordinal
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: ''
+        children:
+          - type: VariablesListBox
+            name: vars
+            isTarget: true
+  - type: LayoutBox
+    stretchFactor: 1
+    margin: large
+    children:
+      - type: CheckBox
+        name: areCounts
+
+      - type: LayoutBox
+        children:
+          - type: TextBox
+            name: testValue
+            format: number
+            inputPattern: "[0-9]+"
+
+  - type: Label
+    label: Hypothesis
+    children:
+      - type: RadioButton
+        name: hypothesis_notequal
+        label: "≠ Test value"
+        optionName: hypothesis
+        optionPart: notequal
+
+      - type: RadioButton
+        name: hypothesis_greater
+        label: "> Test value"
+        optionName: hypothesis
+        optionPart: greater
+
+      - type: RadioButton
+        name: hypothesis_less
+        label: "< Test value"
+        optionName: hypothesis
+        optionPart: less
+
+  - type: Label
+    label: Additional Statistics
+    children:
+      - type: CheckBox
+        name: ci
+        children:
+          - type: TextBox
+            name: ciWidth
+            label: Interval
+            suffix: "%"
+            format: number
+            inputPattern: "[0-9]+"
+            enable: (ci)
+...

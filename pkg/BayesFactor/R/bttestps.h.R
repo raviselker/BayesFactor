@@ -33,9 +33,7 @@ bttestPSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous",
-                    "nominal",
-                    "ordinal"))
+                    "numeric"))
             private$..bfType <- jmvcore::OptionList$new(
                 "bfType",
                 bfType,
@@ -363,6 +361,10 @@ bttestPS <- function(
 
     if ( ! requireNamespace('jmvcore'))
         stop('bttestPS requires jmvcore to be installed (restart may be required)')
+
+    if (missing(data))
+        data <- jmvcore:::marshalData(
+            parent.frame())
 
     options <- bttestPSOptions$new(
         pairs = pairs,

@@ -34,9 +34,7 @@ bttestISOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 suggested=list(
                     "continuous"),
                 permitted=list(
-                    "continuous",
-                    "nominal",
-                    "ordinal"),
+                    "numeric"),
                 rejectInf=FALSE)
             private$..group <- jmvcore::OptionVariable$new(
                 "group",
@@ -219,7 +217,7 @@ bttestISResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `visible`="(meanDiff)"),
                     list(
                         `name`="es", 
-                        `title`="Cohen's d", 
+                        `title`="Effect size", 
                         `type`="number", 
                         `visible`="(effectSize)"),
                     list(
@@ -262,10 +260,6 @@ bttestISResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `title`="Mean", 
                         `type`="number"),
                     list(
-                        `name`="med[1]", 
-                        `title`="Median", 
-                        `type`="number"),
-                    list(
                         `name`="sd[1]", 
                         `title`="SD", 
                         `type`="number"),
@@ -284,10 +278,6 @@ bttestISResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="mean[2]", 
                         `title`="Mean", 
-                        `type`="number"),
-                    list(
-                        `name`="med[2]", 
-                        `title`="Median", 
                         `type`="number"),
                     list(
                         `name`="sd[2]", 
@@ -401,6 +391,12 @@ bttestIS <- function(
 
     if ( ! requireNamespace('jmvcore'))
         stop('bttestIS requires jmvcore to be installed (restart may be required)')
+
+    if (missing(data))
+        data <- jmvcore:::marshalData(
+            parent.frame(),
+            `if`( ! missing(vars), vars, NULL),
+            `if`( ! missing(group), group, NULL))
 
     options <- bttestISOptions$new(
         vars = vars,

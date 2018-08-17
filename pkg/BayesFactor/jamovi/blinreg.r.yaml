@@ -1,0 +1,22 @@
+---
+name:  blinReg
+title: Bayesian Linear Regression
+jrs: '1.0'
+
+items:
+    - name: main
+      title: Linear Regression
+      type: Table
+
+      columns:
+        - name: name
+          title: Model
+          type: text
+
+        - name: bf
+          title: BF₁₀
+
+        - name: err
+          title: 'error %'
+
+...

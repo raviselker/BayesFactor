@@ -1,0 +1,85 @@
+---
+name: bpropTest2
+title: Bayesian Proportion Test (2 Outcomes)
+
+menuGroup: BayesFactor
+menuSubgroup: Frequencies
+menuTitle: 2 Outcomes
+menuSubtitle: Binomial test
+
+description:
+    main: Bayesian binomial test
+    R:
+        usage: |
+            dat <- data.frame(x=c(8, 15))
+
+            bpropTest2(dat, vars = 'x', areCounts = TRUE)
+
+
+version: '1.0.0'
+jas: '1.2'
+
+completeWhenFilled: true
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: the data as a data frame
+
+    - name: vars
+      title: Variables
+      type: Variables
+      suggested:
+        - nominal
+        - ordinal
+      description:
+          R: a vector of strings naming the variables of interest in `data`
+
+    - name: areCounts
+      title: Values are counts
+      type: Bool
+      default: false
+      description:
+          R: >
+            `TRUE` or `FALSE` (default), the variables are counts
+
+    - name: testValue
+      title: Test value
+      type: Number
+      default: 0.5
+      description:
+          R: >
+            a number (default: 0.5), the value for the null hypothesis
+
+    - name: hypothesis
+      title: Hypothesis
+      type: List
+      options:
+        - notequal
+        - greater
+        - less
+      default: notequal
+      description:
+          R: >
+            `'notequal'` (default), `'greater'` or `'less'`, the
+            alternative hypothesis
+
+    - name: ci
+      title: Confidence intervals
+      type: Bool
+      default: false
+      description:
+          R: >
+            `TRUE` or `FALSE` (default), provide confidence intervals
+
+    - name: ciWidth
+      type: Number
+      min: 50
+      max: 99.9
+      default: 95
+      description:
+          R: >
+            a number between 50 and 99.9 (default: 95), the confidence interval
+            width
+...

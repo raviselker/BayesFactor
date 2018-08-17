@@ -40,5 +40,32 @@ analyses:
     menuSubgroup: ANOVA
     menuTitle: Bayesian ANCOVA
     description: Analysis of Covariance
+  - title: Bayesian ANOVA
+    name: banova
+    ns: BayesFactor
+    menuGroup: BayesFactor
+    menuSubgroup: ANOVA
+    menuTitle: Bayesian ANOVA
+    description: Analysis of Variance
+  - title: Bayesian Contingency Tables
+    name: bcontTables
+    ns: BayesFactor
+    menuGroup: BayesFactor
+    menuSubgroup: Frequencies
+    menuTitle: Contingency Tables
+  - title: Bayesian Linear Regression
+    name: blinReg
+    ns: BayesFactor
+    menuGroup: BayesFactor
+    menuSubgroup: ANOVA
+    menuTitle: Bayesian Linear Regression
+  - title: Bayesian Proportion Test (2 Outcomes)
+    name: bpropTest2
+    ns: BayesFactor
+    menuGroup: BayesFactor
+    menuSubgroup: Frequencies
+    menuTitle: 2 Outcomes
+    menuSubtitle: Binomial test
+    description: Bayesian binomial test
 
 ...

@@ -1,0 +1,55 @@
+---
+name: blinReg
+title: Bayesian Linear Regression
+menuGroup: BayesFactor
+menuSubgroup: ANOVA
+version: '1.0.0'
+jas: '1.2'
+
+completeWhenFilled: true
+
+options:
+    - name: data
+      type: Data
+      description:
+          R: the data as a data frame
+
+    - name: dep
+      title: Dependent Variable
+      type: Variable
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+      description:
+          R: >
+            a string naming the dependent variable from `data`, variable
+            must be numeric
+
+    - name: covs
+      title: Covariates
+      type: Variables
+      suggested:
+        - continuous
+      permitted:
+        - numeric
+      default:
+      description:
+          R: a vector of strings naming the covariates from `data`
+
+    - name: covPrior
+      title: Covariates prior width
+      type: Number
+      min: 0.1
+      max: 2
+      default: .354
+
+    - name: modelTerms
+      title: Model Terms
+      type: Terms
+      default:
+      description:
+          R: >
+            a list of character vectors describing the terms to go into the
+            model
+...
