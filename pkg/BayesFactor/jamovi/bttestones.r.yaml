@@ -13,6 +13,7 @@ items:
         - hypothesis
         - testValue
         - miss
+        - ciWidth
 
       columns:
         - name: var
@@ -20,12 +21,6 @@ items:
           content: ($key)
           type: text
           combineBelow: true
-
-        - name: t
-          title: t
-
-        - name: df
-          title: df
 
         - name: bf10
           title: BF₁₀
@@ -60,7 +55,7 @@ items:
           type: number
           visible: (ci)
 
-    - name: descriptives
+    - name: desc
       title: Descriptives
       type: Table
       description: a table containing the descriptives
@@ -77,30 +72,51 @@ items:
 
         - name: num
           title: "N"
-          type: number
+          type: integer
 
         - name: mean
           title: Mean
-          type: number
-
-        - name: median
-          title: Median
           type: number
 
         - name: sd
           title: SD
           type: number
 
-        - name: se
-          title: SE
-          type: number
-
     - name: plots
       title: Plots
-      description: an image of the descriptive plots
-      visible: (plots)
-      type: Image
-      renderFun: .plot
+      type: Array
+      description: an array of descriptive plots
+      items: (vars)
       clearWith:
-        - vars
         - miss
+        - bfPrior
+        - hypothesis
+        - testValue
+      template:
+          title: $key
+          type: Group
+          items:
+            - name: desc
+              type: Image
+              description: descriptives plot
+              visible: (descPlot)
+              renderFun: .desc
+              clearWith: []
+            - name: pp
+              type: Image
+              description: prior and posterior plot
+              visible: (pp)
+              renderFun: .pp
+              clearWith:
+                - bfType
+              height: 350
+              width: 450
+            - name: robust
+              type: Image
+              description: robustness check
+              visible: (robust)
+              renderFun: .robust
+              clearWith:
+                - bfType
+              height: 350
+              width: 470

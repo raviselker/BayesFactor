@@ -10,17 +10,16 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             bfType = "BF10",
             bfPrior = 0.707,
             testValue = 0,
-            hypothesis = "dt",
+            hypothesis = "different",
             meanDiff = FALSE,
             effectSize = FALSE,
             ci = FALSE,
             ciWidth = 95,
             desc = FALSE,
-            plots = FALSE,
             miss = "perAnalysis",
+            descPlot = FALSE,
             pp = FALSE,
-            robust = FALSE,
-            assum = FALSE, ...) {
+            robust = FALSE, ...) {
 
             super$initialize(
                 package='BayesFactor',
@@ -57,10 +56,10 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "hypothesis",
                 hypothesis,
                 options=list(
-                    "dt",
-                    "gt",
-                    "lt"),
-                default="dt")
+                    "different",
+                    "greater",
+                    "less"),
+                default="different")
             private$..meanDiff <- jmvcore::OptionBool$new(
                 "meanDiff",
                 meanDiff,
@@ -83,10 +82,6 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                 "desc",
                 desc,
                 default=FALSE)
-            private$..plots <- jmvcore::OptionBool$new(
-                "plots",
-                plots,
-                default=FALSE)
             private$..miss <- jmvcore::OptionList$new(
                 "miss",
                 miss,
@@ -94,6 +89,11 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
                     "perAnalysis",
                     "listwise"),
                 default="perAnalysis")
+            private$..descPlot <- jmvcore::OptionBool$new(
+                "descPlot",
+                descPlot,
+                default=FALSE,
+                hidden=TRUE)
             private$..pp <- jmvcore::OptionBool$new(
                 "pp",
                 pp,
@@ -101,10 +101,6 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             private$..robust <- jmvcore::OptionBool$new(
                 "robust",
                 robust,
-                default=FALSE)
-            private$..assum <- jmvcore::OptionBool$new(
-                "assum",
-                assum,
                 default=FALSE)
 
             self$.addOption(private$..vars)
@@ -117,11 +113,10 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
             self$.addOption(private$..ci)
             self$.addOption(private$..ciWidth)
             self$.addOption(private$..desc)
-            self$.addOption(private$..plots)
             self$.addOption(private$..miss)
+            self$.addOption(private$..descPlot)
             self$.addOption(private$..pp)
             self$.addOption(private$..robust)
-            self$.addOption(private$..assum)
         }),
     active = list(
         vars = function() private$..vars$value,
@@ -134,11 +129,10 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ci = function() private$..ci$value,
         ciWidth = function() private$..ciWidth$value,
         desc = function() private$..desc$value,
-        plots = function() private$..plots$value,
         miss = function() private$..miss$value,
+        descPlot = function() private$..descPlot$value,
         pp = function() private$..pp$value,
-        robust = function() private$..robust$value,
-        assum = function() private$..assum$value),
+        robust = function() private$..robust$value),
     private = list(
         ..vars = NA,
         ..bfType = NA,
@@ -150,18 +144,17 @@ bttestOneSOptions <- if (requireNamespace('jmvcore')) R6::R6Class(
         ..ci = NA,
         ..ciWidth = NA,
         ..desc = NA,
-        ..plots = NA,
         ..miss = NA,
+        ..descPlot = NA,
         ..pp = NA,
-        ..robust = NA,
-        ..assum = NA)
+        ..robust = NA)
 )
 
 bttestOneSResults <- if (requireNamespace('jmvcore')) R6::R6Class(
     inherit = jmvcore::Group,
     active = list(
         ttest = function() private$.items[["ttest"]],
-        descriptives = function() private$.items[["descriptives"]],
+        desc = function() private$.items[["desc"]],
         plots = function() private$.items[["plots"]]),
     private = list(),
     public=list(
@@ -178,7 +171,8 @@ bttestOneSResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                 clearWith=list(
                     "hypothesis",
                     "testValue",
-                    "miss"),
+                    "miss",
+                    "ciWidth"),
                 columns=list(
                     list(
                         `name`="var", 
@@ -186,12 +180,6 @@ bttestOneSResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `content`="($key)", 
                         `type`="text", 
                         `combineBelow`=TRUE),
-                    list(
-                        `name`="t", 
-                        `title`="t"),
-                    list(
-                        `name`="df", 
-                        `title`="df"),
                     list(
                         `name`="bf10", 
                         `title`="BF\u2081\u2080", 
@@ -227,7 +215,7 @@ bttestOneSResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                         `visible`="(ci)"))))
             self$add(jmvcore::Table$new(
                 options=options,
-                name="descriptives",
+                name="desc",
                 title="Descriptives",
                 visible="(desc)",
                 rows="(vars)",
@@ -242,32 +230,62 @@ bttestOneSResults <- if (requireNamespace('jmvcore')) R6::R6Class(
                     list(
                         `name`="num", 
                         `title`="N", 
-                        `type`="number"),
+                        `type`="integer"),
                     list(
                         `name`="mean", 
                         `title`="Mean", 
                         `type`="number"),
                     list(
-                        `name`="median", 
-                        `title`="Median", 
-                        `type`="number"),
-                    list(
                         `name`="sd", 
                         `title`="SD", 
-                        `type`="number"),
-                    list(
-                        `name`="se", 
-                        `title`="SE", 
                         `type`="number"))))
-            self$add(jmvcore::Image$new(
+            self$add(jmvcore::Array$new(
                 options=options,
                 name="plots",
                 title="Plots",
-                visible="(plots)",
-                renderFun=".plot",
+                items="(vars)",
                 clearWith=list(
-                    "vars",
-                    "miss")))}))
+                    "miss",
+                    "bfPrior",
+                    "hypothesis",
+                    "testValue"),
+                template=R6::R6Class(
+                    inherit = jmvcore::Group,
+                    active = list(
+                        desc = function() private$.items[["desc"]],
+                        pp = function() private$.items[["pp"]],
+                        robust = function() private$.items[["robust"]]),
+                    private = list(),
+                    public=list(
+                        initialize=function(options) {
+                            super$initialize(
+                                options=options,
+                                name="undefined",
+                                title="$key")
+                            self$add(jmvcore::Image$new(
+                                options=options,
+                                name="desc",
+                                visible="(descPlot)",
+                                renderFun=".desc",
+                                clearWith=list()))
+                            self$add(jmvcore::Image$new(
+                                options=options,
+                                name="pp",
+                                visible="(pp)",
+                                renderFun=".pp",
+                                clearWith=list(
+                                    "bfType"),
+                                height=350,
+                                width=450))
+                            self$add(jmvcore::Image$new(
+                                options=options,
+                                name="robust",
+                                visible="(robust)",
+                                renderFun=".robust",
+                                clearWith=list(
+                                    "bfType"),
+                                height=350,
+                                width=470))}))$new(options=options)))}))
 
 bttestOneSBase <- if (requireNamespace('jmvcore')) R6::R6Class(
     "bttestOneSBase",
@@ -304,9 +322,9 @@ bttestOneSBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #' @param bfPrior a number between 0.5 and 2 (default 0.707), the prior width
 #'   to use in calculating Bayes factors
 #' @param testValue a number specifying the value of the null hypothesis
-#' @param hypothesis \code{'dt'} (default), \code{'gt'} or \code{'lt'}, the
-#'   alternative hypothesis; different to \code{testValue}, greater than
-#'   \code{testValue}, and less than \code{testValue} respectively
+#' @param hypothesis \code{'different'} (default), \code{'greater'} or
+#'   \code{'less'}, the alternative hypothesis; different to \code{testValue},
+#'   greater than \code{testValue}, and less than \code{testValue} respectively
 #' @param meanDiff \code{TRUE} or \code{FALSE} (default), provide means and
 #'   standard deviations
 #' @param effectSize \code{TRUE} or \code{FALSE} (default), provide effect
@@ -317,20 +335,19 @@ bttestOneSBase <- if (requireNamespace('jmvcore')) R6::R6Class(
 #'   confidence intervals
 #' @param desc \code{TRUE} or \code{FALSE} (default), provide descriptive
 #'   statistics
-#' @param plots \code{TRUE} or \code{FALSE} (default), provide descriptive
-#'   plots
 #' @param miss \code{'perAnalysis'} or \code{'listwise'}, how to handle
 #'   missing values; \code{'perAnalysis'} excludes missing values for individual
 #'   dependent variables, \code{'listwise'} excludes a row from all analyses if
 #'   one of its entries is missing.
+#' @param descPlot \code{TRUE} or \code{FALSE} (default), provide descriptive
+#'   plots
 #' @param pp .
 #' @param robust .
-#' @param assum .
 #' @return A results object containing:
 #' \tabular{llllll}{
 #'   \code{results$ttest} \tab \tab \tab \tab \tab a table containing the t-test results \cr
-#'   \code{results$descriptives} \tab \tab \tab \tab \tab a table containing the descriptives \cr
-#'   \code{results$plots} \tab \tab \tab \tab \tab an image of the descriptive plots \cr
+#'   \code{results$desc} \tab \tab \tab \tab \tab a table containing the descriptives \cr
+#'   \code{results$plots} \tab \tab \tab \tab \tab an array of descriptive plots \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -346,17 +363,16 @@ bttestOneS <- function(
     bfType = "BF10",
     bfPrior = 0.707,
     testValue = 0,
-    hypothesis = "dt",
+    hypothesis = "different",
     meanDiff = FALSE,
     effectSize = FALSE,
     ci = FALSE,
     ciWidth = 95,
     desc = FALSE,
-    plots = FALSE,
     miss = "perAnalysis",
+    descPlot = FALSE,
     pp = FALSE,
-    robust = FALSE,
-    assum = FALSE) {
+    robust = FALSE) {
 
     if ( ! requireNamespace('jmvcore'))
         stop('bttestOneS requires jmvcore to be installed (restart may be required)')
@@ -377,11 +393,10 @@ bttestOneS <- function(
         ci = ci,
         ciWidth = ciWidth,
         desc = desc,
-        plots = plots,
         miss = miss,
+        descPlot = descPlot,
         pp = pp,
-        robust = robust,
-        assum = assum)
+        robust = robust)
 
     results <- bttestOneSResults$new(
         options = options)

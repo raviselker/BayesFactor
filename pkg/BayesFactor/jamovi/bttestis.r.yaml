@@ -21,12 +21,6 @@ items:
           content: ($key)
           type: text
 
-        - name: t
-          title: t
-
-        - name: df
-          title: df
-
         - name: bf10
           title: BF₁₀
           visible: (bfType:BF10)
@@ -40,11 +34,6 @@ items:
 
         - name: md
           title: Mean difference
-          type: number
-          visible: (meanDiff)
-
-        - name: sed
-          title: SE difference
           type: number
           visible: (meanDiff)
 
@@ -97,10 +86,6 @@ items:
           title: SD
           type: number
 
-        - name: se[1]
-          title: SE
-          type: number
-
         - name: group[2]
           title: Group
           type: text
@@ -117,20 +102,41 @@ items:
           title: SD
           type: number
 
-        - name: se[2]
-          title: SE
-          type: number
-
     - name: plots
       title: Plots
       type: Array
-      description: an array of the descriptive plots
-      visible: (plots)
+      description: an array of descriptive plots
       items: (vars)
+      clearWith:
+        - group
+        - miss
+        - bfPrior
+        - hypothesis
       template:
           title: $key
-          type: Image
-          renderFun: .plot
-          clearWith:
-            - group
-            - miss
+          type: Group
+          items:
+            - name: desc
+              type: Image
+              description: descriptives plot
+              visible: (descPlot)
+              renderFun: .desc
+              clearWith: []
+            - name: pp
+              type: Image
+              description: prior and posterior plot
+              visible: (pp)
+              renderFun: .pp
+              clearWith:
+                - bfType
+              height: 350
+              width: 450
+            - name: robust
+              type: Image
+              description: robustness check
+              visible: (robust)
+              renderFun: .robust
+              clearWith:
+                - bfType
+              height: 350
+              width: 470

@@ -1,4 +1,3 @@
----
 name: bttestOneS
 title: Bayesian One Sample T-Test
 jus: '2.0'
@@ -38,19 +37,19 @@ children:
                     format: number
                     inputPattern: '[0-9]+'
               - type: RadioButton
-                name: hypothesis_dt
+                name: hypothesis_different
                 optionName: hypothesis
-                optionPart: dt
+                optionPart: different
                 label: ≠ Test value
               - type: RadioButton
-                name: hypothesis_gt
+                name: hypothesis_greater
                 optionName: hypothesis
-                optionPart: gt
+                optionPart: greater
                 label: '> Test value'
               - type: RadioButton
-                name: hypothesis_lt
+                name: hypothesis_less
                 optionName: hypothesis
-                optionPart: lt
+                optionPart: less
                 label: < Test value
           - type: Label
             label: Bayes factor
@@ -134,12 +133,6 @@ children:
             label: Plots
             children:
               - type: CheckBox
-                name: plots
-                label: Descriptives
-              - type: CheckBox
                 name: pp
               - type: CheckBox
                 name: robust
-              - type: CheckBox
-                name: assum
-...

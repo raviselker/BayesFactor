@@ -1,4 +1,3 @@
----
 name: bttestPS
 title: Bayesian Paired Samples T-Test
 jus: '2.0'
@@ -138,12 +137,6 @@ children:
             label: Plots
             children:
               - type: CheckBox
-                name: plots
-                label: Descriptives
-              - type: CheckBox
                 name: pp
               - type: CheckBox
                 name: robust
-              - type: CheckBox
-                name: assum
-...

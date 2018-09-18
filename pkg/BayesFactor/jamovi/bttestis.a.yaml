@@ -128,14 +128,6 @@ options:
           R: >
             `TRUE` or `FALSE` (default), provide descriptive statistics
 
-    - name: plots
-      title: Descriptives Plots
-      type: Bool
-      default: false
-      description:
-          R: >
-            `TRUE` or `FALSE` (default), provide descriptive plots
-
     - name: miss
       title: Missing values exclusion method
       type: List
@@ -150,6 +142,15 @@ options:
             dependent variables, `'listwise'` excludes a row from all
             analyses if one of its entries is missing.
 
+    - name: descPlot
+      title: Descriptives Plots
+      type: Bool
+      default: false
+      hidden: true
+      description:
+          R: >
+            `TRUE` or `FALSE` (default), provide descriptive plots
+
     - name: pp
       title: Prior and posterior
       type: Bool
@@ -160,8 +161,4 @@ options:
       type: Bool
       default: false
 
-    - name: assum
-      title: Assumption checks
-      type: Bool
-      default: false
 ...
